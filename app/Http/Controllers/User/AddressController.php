@@ -2,44 +2,35 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\Country;
-use App\Models\Configuration;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\AddressRequest;
 use App\Models\Address;
+use Illuminate\Http\Request;
+use App\Http\Responses\BadResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddressRequest;
+use App\Http\Resources\AddressResource;
+use App\Http\Responses\SuccessResponse;
+use App\Http\Responses\UnauthorizedResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AddressController extends Controller
 {
     /**
-      * Display a listing of the user addresses.
-      *
-      * @return \Illuminate\Http\Response
-      */
-    public function index()
-    {
-        $user = Auth::user();
-        $addresses = Address::whereUserId($user->id)->get();
-        return view('address.my-account.address')
-            ->with('user', $user)
-            ->with('addresses', $addresses);
-    }
-
-    /**
-     * Show the form for creating a new user addresses.
+     * Display a listing of the user addresses.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $countries = Country::options();
-        $defaultCountry = Configuration::getConfiguration('user_default_country');
+        $user = $request->user('api');
 
-        return view('address.my-account.create-address')
-            ->with('user', $user)
-            ->with('countries', $countries)
-            ->with('defaultCountry', $defaultCountry);
+        $addresses = Address::with('user')
+            ->whereUserId($user->id)
+            ->paginate();
+        if ($addresses->total() === 0) {
+            throw new ModelNotFoundException(trans('alerts.records_not_found'));
+        }
+
+        return AddressResource::collection($addresses);
     }
 
     /**
@@ -51,30 +42,15 @@ class AddressController extends Controller
      */
     public function store(AddressRequest $request)
     {
-        $user = Auth::user();
-        $request->merge(['user_id' => $user->id]);
-        Address::create($request->all());
+        $user = $request->user('api');
+        $data = $request->toBag()->attributes();
+        $addressCount = Address::whereUserId($user->id)->count();
+        if ($addressCount === 0) {
+            $data['default'] = true;
+        }
+        $address = $user->addresses()->create($data);
 
-        return redirect()->route('my-account.address.index');
-    }
-
-    /**
-     * Show the form for editing the specified user addresses.
-     *
-     * @param \App\Models\Address $address
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Address  $address)
-    {
-        $user = Auth::user();
-        $defaultCountry = Configuration::getConfiguration('user_default_country');
-        $countries = Country::options();
-
-        return view('address.my-account.edit-address')
-            ->with('user', $user)
-            ->with('model', $address)
-            ->with('defaultCountry', $defaultCountry)
-            ->with('countries', $countries);
+        return new AddressResource($address->fresh());
     }
 
     /**
@@ -86,7 +62,39 @@ class AddressController extends Controller
      */
     public function update(AddressRequest $request, Address $address)
     {
-        $address->update($request->all());
-        return redirect()->route('my-account.address.index');
+        $data = $request->toBag()->attributes();
+        $address->update($data);
+
+        return new AddressResource($address);
+    }
+
+    /**
+     * Delete the specified user addresses from database.
+     *
+     * @param \App\Models\Address $address
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Address $address)
+    {
+        if ($address->default) {
+            return new BadResponse('Default address can not be deleted');
+        }
+        return new SuccessResponse('Address deleted');
+    }
+
+    public function markAsDefault(Request $request, Address $address)
+    {
+        if ($address && $request->user('api')->id === $address->user_id) {
+            $address = tap(Address::whereDefault(true)->first(), function ($defaultAddress) use ($address) {
+                if ($defaultAddress->id !== $address->id) {
+                    $defaultAddress->update(['default' => false]);
+                    $address->update(['default' => true]);
+                    return $address;
+                }
+            });
+            return ((new AddressResource($address))
+                ->additional(['message' => trans('Address marked as default')]));
+        }
+        return new UnauthorizedResponse();
     }
 }

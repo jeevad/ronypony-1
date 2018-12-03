@@ -2,6 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\AddressBag;
+use App\Rules\ValidateZIPCode;
+use App\Rules\ValidateLastName;
+use App\Rules\ValidateLocality;
+use App\Rules\ValidateFirstName;
+use App\Rules\ValidateOfficeName;
 use Illuminate\Foundation\Http\FormRequest as Request;
 
 class AddressRequest extends Request
@@ -13,7 +19,12 @@ class AddressRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        if ($this->isMethod('POST')) {
+            return true;
+        }
+        $address = $this->route('address');
+        return $address && $this->user('api')->id === $address->user_id;
+
     }
 
     /**
@@ -24,12 +35,24 @@ class AddressRequest extends Request
     public function rules()
     {
         return [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'address1' => 'required|max:255',
-            'city' => 'required|max:255',
-            'country_id' => 'required',
-            'phone' => 'required|max:255',
+            'first_name' => ['required', new ValidateFirstName, 'min:3', 'max:50'],
+            'last_name' => ['required', new ValidateLastName, 'min:1', 'max:50'],
+            'office_name' => ['sometimes', new ValidateOfficeName, 'min:3', 'max:50'],
+            'email' => 'sometimes|max:255|email',
+            'phone_number' => 'sometimes|max:20',
+            'locality' => ['required', new ValidateLocality, 'min:3', 'max:100'],
+            'address' => ['required', 'min:10', 'max:250'],
+            'landmark' => 'sometimes|max:255',
+            'city' => 'required|alpha|max:255',
+            'state_id' => 'required|exists:states,id',
+            'country_id' => 'required|exists:countries,id',
+            'zip_code' => ['required', new ValidateZIPCode],
+            'default' => 'sometimes|in:true,false',
         ];
+    }
+
+    public function toBag(): AddressBag
+    {
+        return new AddressBag($this->validated());
     }
 }
