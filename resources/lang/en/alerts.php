@@ -12,6 +12,7 @@ return [
     'unauthorized' => 'Unauthorized',
     'bad_request' => 'Bad request',
     'resource_not_found' => 'Requested resource not found',
+    'records_not_found' => 'No records found',
     'token_mismatch' => 'Invalid verification token.',
     'email_verified' => 'Thank you for verifying your account',
     'email_updated' => 'Your E-mail address successfully updated. Please verify the account',
