@@ -39,10 +39,16 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email_verified_at',
     ];
 
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
     public function setEmailAttribute($email)
     {
         $this->attributes['email'] = strtolower($email);
     }
+
     public function setFullNameAttribute($fullName)
     {
         $this->attributes['full_name'] = ucwords($fullName);

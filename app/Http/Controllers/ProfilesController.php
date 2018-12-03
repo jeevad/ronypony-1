@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Events\UserRegistered;
 use App\Http\Resources\ProfileResource;
 use App\Http\Responses\AuthLoginResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProfilesController extends Controller
 {
@@ -40,13 +41,12 @@ class ProfilesController extends Controller
         return new AuthLoginResponse($token);
     }
 
-    public function show(Request $request)
+    public function show(User $user)
     {
-        try {
-            $user = auth('api')->userOrFail();
-            return new ProfileResource($user);
-        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['message' => 'Failed to get user.'], 500);
+        echo $user->id;
+        if (!$user) {
+            throw new ModelNotFoundException;
         }
+        return new ProfileResource($user);
     }
 }
