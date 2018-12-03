@@ -28,5 +28,7 @@ Route::middleware('jwt.verify')->group(function () {
         Route::post('refresh', 'AuthController@refresh');
         Route::get('me', 'AuthController@me');
     });
-    Route::get('profiles/{id}', 'ProfilesController@show');
+    Route::get('profiles/{profile}', 'ProfilesController@show');
+    Route::apiResource('addresses', 'User\AddressController');
+    Route::patch('addresses/{address}/mark-default', 'User\AddressController@markAsDefault');
 });
