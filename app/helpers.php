@@ -30,3 +30,11 @@ if (!function_exists('logo_url')) {
         return asset("assets/front/images/icons/logo.png");
     }
 }
+
+if (!function_exists('generate_file_name')) {
+
+    function generate_file_name($file_ext)
+    {
+        return time() . "-" . uniqid() . '.' . $file_ext;
+    }
+}
