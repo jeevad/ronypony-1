@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Hash;
 use App\Models\Traits\UserScope;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Traits\EmailVerification;
@@ -19,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
      * @var array
      */
     protected $fillable = [
-        'full_name', 'email', 'password', 'sign_up_ip', 'sign_up_user_agent',
+        'full_name', 'email', 'password', 'mobile_number', 'sign_up_ip', 'sign_up_user_agent',
         'email_activation_token', 'email_activation_token_sent_at',
     ];
 
@@ -54,12 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         $this->attributes['full_name'] = ucwords($fullName);
     }
 
-    public function hasPassword(): bool
-    {
-        $password = $this->getAuthPassword();
-        return $password !== '' && $password !== null;
-    }
-
     public function queryEmail($query, $email)
     {
         return $query->where('email', $email);
@@ -69,10 +64,43 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     {
         return $query->where('mobile_number', $mobileNumber);
     }
+    
+    public function hasPassword(): bool
+    {
+        $password = $this->getAuthPassword();
+        return $password !== '' && $password !== null;
+    }
 
     public function isBanned(): bool
     {
         return !is_null($this->banned_at);
+    }
+
+    public function authenticatePassword($plainPassword): bool
+    {
+        return Hash::check($plainPassword, $this->getAuthPassword());
+    }
+
+    public function updatePassword($password)
+    {
+        $this->password = Hash::make($password);
+        $this->save();
+    }
+
+    public function avatarFolder()
+    {
+        return 'uploads/users/' . $this->id;
+    }
+
+    public function updateAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+        $this->save();
+    }
+
+    public function avatarURL()
+    {
+        return asset("storage/{$this->avatarFolder()}/{$this->avatar}");
     }
 
     /**

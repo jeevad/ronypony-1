@@ -125,6 +125,18 @@ return [
     */
 
     'custom' => [
+        'full_name' => [
+            'required' => 'Full name can not be blank',
+            'full_name' => 'Invalid full name',
+            'min' => 'Your name may not be less than 3 characters.',
+            'max' => 'Your name may not be greater than 100 characters.',
+        ],
+        'mobile_number' => [
+            'required' => 'Mobile number can not be blank',
+            'mobile_number' => 'Invalid Mobile Number',
+            'exists' => 'Sorry, there is no user associated with this mobile number',
+            'unique' => 'Sorry, there is an user associated with this mobile number',
+        ],
         'first_name' => [
             'required' => 'First name can not be blank',
             'first_name' => 'Invalid first name',
