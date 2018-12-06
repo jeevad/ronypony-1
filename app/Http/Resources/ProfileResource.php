@@ -18,7 +18,9 @@ class ProfileResource extends JsonResource
             'id' => $this->id,
             'full_name' => $this->full_name,
             'email' => $this->email,
+            'mobile_number' => $this->mobile_number,
             'has_password' => $this->hasPassword(),
+            'avatar' => $this->avatarURL(),
         ];
     }
 }

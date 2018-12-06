@@ -23,8 +23,8 @@ class UploadUserImageRequest extends FormRequest
      */
     public function rules()
     {
-        $validation['profile_image'] = 'required|mimes:jpeg,gif,png';
-
-        return $validation;
+        return [
+            'avatar' => 'required|mimes:jpeg,gif,png',
+        ];
     }
 }

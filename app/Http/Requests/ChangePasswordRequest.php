@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+
 class ChangePasswordRequest extends FormRequest
 {
     /**
@@ -15,6 +16,7 @@ class ChangePasswordRequest extends FormRequest
     {
         return true;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,9 +24,9 @@ class ChangePasswordRequest extends FormRequest
      */
     public function rules()
     {
-        $validation['password'] = 'required|min:6|confirmed';
-        $validation['current_password'] = 'required';
-        $user = Auth::user();
-        return $validation;
+        return [
+            'password' => 'required|min:6|confirmed',
+            'current_password' => 'required',
+        ];
     }
 }

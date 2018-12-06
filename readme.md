@@ -35,6 +35,7 @@
 * `Give permissions to storage/logs and bootstrap/cache folders`
 * run `php artisan key:generate`
 * run `php artisan migrate`
+* run `php artisan storage:link`
 * Create virtual host for the project something like http://web.ronypony.local/ (optional)
 
 ### JWT token ###
