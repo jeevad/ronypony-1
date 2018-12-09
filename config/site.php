@@ -59,4 +59,6 @@ return [
             ],
         ],
     ],
+    'admin_name' => env('SITE_ADMIN_NAME', 'Ronypony Admin'),
+    'admin_email' => env('SITE_ADMIN_EMAIL', 'admin@ronypony.com'),
 ];

@@ -43,3 +43,10 @@
 
 ### Database seeding ###
 * run `php artisan db:seed`
+
+### Testing ###
+* run `cp .env.testing.example .env.testing`
+* run `php artisan key:generate --env=testing` to generete app key for test cases
+* run `php artisan config:clear`
+* `vendor\bin\phpunit` to run test cases
+* `vendor\bin\phpunit --filter <tes_name>` to run specific test case
