@@ -1,28 +1,48 @@
-<?php 
+<?php
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use App\Models\Role;
+use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
 {
-  public function run()
-  {
-    $role_employee = Role::where('name', 'admin')->first();
-    $role_manager  = Role::where('name', 'manager')->first();
+    use \Database\DisableForeignKeys;
 
-    $employee = new User();
-    $employee->name = 'Employee Name';
-    $employee->email = 'jeeva.jccd@gmail.com';
-    $employee->password = bcrypt('12345678');
-    $employee->save();
-    $employee->roles()->attach($role_employee);
+    public function run()
+    {
+        $adminRole = Role::where('slug', 'admin')->first();
+        $moderatorRole = Role::where('slug', 'moderator')->first();
+        $userRole = Role::where('slug', 'user')->first();
 
-    $manager = new User();
-    $manager->name = 'Manager Name';
-    $manager->email = 'manager@example.com';
-    $manager->password = bcrypt('12345678');
-    $manager->save();
-    $manager->roles()->attach($role_manager);
-  }
+        $this->disableForeignKeys();
+        DB::table('users')->truncate();
+
+        DB::table('users')->insert([
+            [
+                'full_name' => config('site.admin_name'),
+                'email' => config('site.admin_email'),
+                'password' => bcrypt('123456'),
+                'email_verified' => true,
+                'email_verified_at' => now(),
+                'role_id' => $adminRole->id,
+            ],
+            [
+                'full_name' => 'Moderator',
+                'email' => 'moderator@ronypony.com',
+                'password' => bcrypt('123456'),
+                'email_verified' => true,
+                'email_verified_at' => now(),
+                'role_id' => $moderatorRole->id,
+            ],
+            [
+                'full_name' => 'Nageswara Rao S',
+                'email' => 'nag.samayam@gmail.com',
+                'password' => bcrypt('123456'),
+                'email_verified' => true,
+                'email_verified_at' => now(),
+                'role_id' => $userRole->id,
+            ],
+        ]);
+
+        $this->command->info('Users seeded');
+    }
 }

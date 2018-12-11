@@ -8,6 +8,7 @@ use App\Http\Responses\SuccessResponse;
 use App\Http\Responses\AuthLoginResponse;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Responses\ServerErrorResponse;
+use App\Http\Responses\UnauthenticatedResponse;
 
 class AuthController extends Controller
 {

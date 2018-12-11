@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
+use Database\DisableForeignKeys;
 
 class RoleTableSeeder extends Seeder
 {
+    use DisableForeignKeys;
+
     /**
      * Run the database seeds.
      *
@@ -12,19 +14,24 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        $role_employee = new Role();
-        $role_employee->name = 'admin';
-        $role_employee->description = 'A Admin User';
-        $role_employee->save();
+        $this->disableForeignKeys();
+        DB::table('roles')->truncate();
 
-        $role_manager = new Role();
-        $role_manager->name = 'manager';
-        $role_manager->description = 'A Manager User';
-        $role_manager->save();
+        DB::table('roles')->insert([
+            [
+                'name' => 'Admin',
+                'slug' => 'admin',
+            ],
+            [
+                'name' => 'Moderator',
+                'slug' => 'moderator',
+            ],
+            [
+                'name' => 'User',
+                'slug' => 'user',
+            ],
+        ]);
 
-        $role_manager = new Role();
-        $role_manager->name = 'user';
-        $role_manager->description = 'A End User';
-        $role_manager->save();
+        $this->command->info('Roles seeded');
     }
 }
