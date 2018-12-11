@@ -36,7 +36,6 @@ class RegistarationTest extends TestCase
         $this->_prepare_user_registration_response()
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors(['email']);
-
     }
 
     /** @test */
@@ -45,7 +44,6 @@ class RegistarationTest extends TestCase
         $this->_prepare_user_registration_response(['email' => 'abc'])
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors(['email']);
-
     }
 
     /** @test */
@@ -65,6 +63,14 @@ class RegistarationTest extends TestCase
             'email' => str_repeat('a', 247) . '@test.com', // 256
         ])->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonValidationErrors(['email']);
+    }
+
+    /** @test */
+    public function full_name_should_not_be_too_short()
+    {
+        $this->_prepare_user_registration_response(['full_name' => str_repeat('a', 2),])
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonValidationErrors(['full_name']);
     }
 
     /** @test */
