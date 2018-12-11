@@ -40,6 +40,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email_verified_at',
     ];
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function addresses()
     {
         return $this->hasMany(Address::class);
@@ -64,7 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     {
         return $query->where('mobile_number', $mobileNumber);
     }
-    
+
     public function hasPassword(): bool
     {
         $password = $this->getAuthPassword();
@@ -101,6 +106,60 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function avatarURL()
     {
         return asset("storage/{$this->avatarFolder()}/{$this->avatar}");
+    }
+    
+    /**
+     * Check admin role
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->isRole('admin');
+    }
+
+    /**
+     * Returns whether a user has a role of 'moderator'
+     *
+     * @return boolean
+     */
+    public function isModerator()
+    {
+        return $this->isRole('moderator');
+    }
+
+    /**
+     * Check user/citizen role
+     *
+     * @return bool
+     */
+    public function isUser()
+    {
+        return $this->isRole('user');
+    }
+
+    /**
+     * Check if user is $role.
+     *
+     * @param string $role
+     *
+     * @return mixed
+     */
+    public function isRole($role)
+    {
+        return $this->role()->where('slug', $role)->exists();
+    }
+
+    /**
+     * Check if user in $roles.
+     *
+     * @param array $roles
+     *
+     * @return mixed
+     */
+    public function inRoles($roles = [])
+    {
+        return $this->role()->whereIn('slug', (array)$roles)->exists();
     }
 
     /**

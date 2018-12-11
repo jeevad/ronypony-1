@@ -112,6 +112,7 @@ return [
     'unique' => 'The :attribute has already been taken.',
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute format is invalid.',
+    'uuid' => 'The :attribute must be a valid UUID.',
 
     /*
     |--------------------------------------------------------------------------
@@ -129,7 +130,7 @@ return [
             'required' => 'Full name can not be blank',
             'full_name' => 'Invalid full name',
             'min' => 'Your name may not be less than 3 characters.',
-            'max' => 'Your name may not be greater than 100 characters.',
+            'max' => 'Your name may not be greater than 60 characters.',
         ],
         'mobile_number' => [
             'required' => 'Mobile number can not be blank',
