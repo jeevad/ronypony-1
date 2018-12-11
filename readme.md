@@ -2,7 +2,6 @@
 
 ### Website [Ronypony](https://www.ronypony.com/)
 
-
 ### Prerequisites ###
 
     *  Webserver(apache) >= 2.4
@@ -43,3 +42,12 @@
 
 ### Database seeding ###
 * run `php artisan db:seed`
+
+### Testing ###
+* make sure sqlite extension installed and enabled
+* run `cp .env.testing.example .env.testing`
+* run `php artisan key:generate --env=testing` to generete app key for test cases
+* run `str_random(32) in tinker and assign value in JWT_SECRET in .env.testing`
+* run `php artisan config:clear`
+* `vendor\bin\phpunit` to run test cases
+* `vendor\bin\phpunit --filter <tes_name>` to run specific test case

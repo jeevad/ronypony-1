@@ -17,7 +17,7 @@ class AuthLoginResponse extends BaseResponse
         return response()->json([
             'access_token' => $this->token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 3600
+            'expires_in' => auth('api')->factory()->getTTL() * (int)config('jwt.ttl')
         ]);
     }
 }
