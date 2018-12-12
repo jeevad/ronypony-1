@@ -52,3 +52,9 @@
 * run `php artisan config:clear`
 * `vendor\bin\phpunit` to run test cases
 * `vendor\bin\phpunit --filter <tes_name>` to run specific test case
+
+### Clear ###
+* `php artisan config:clear`
+* `php artisan clear-compiled`
+* `php artisan optimize`
+* `php artisan config:cache`
