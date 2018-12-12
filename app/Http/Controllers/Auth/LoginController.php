@@ -40,7 +40,7 @@ class LoginController extends Controller
     public function redirectTo()
     {
         // redirect based on roles
-        if (\Auth::user()->hasRole('admin')) {
+        if (\Auth::user()->isAdmin()) {
             return '/admin/dashboard';
         } else {
             // die('out');
