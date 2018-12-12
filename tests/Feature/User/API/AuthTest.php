@@ -42,7 +42,7 @@ class AuthTest extends TestCase
     function an_authenticated_user_can_view_own_profile()
     {
         $user = factory(User::class)->create();
-        $this->apiAs($user, 'GET', "{$this->uri}/me", $this->headers)
+        $this->apiAs($user, 'GET', "{$this->uri}/me", [], $this->headers)
             ->assertSuccessful()
             ->assertJsonFragment([
                 'id' => $user->id,
@@ -55,7 +55,7 @@ class AuthTest extends TestCase
     public function users_can_request_refresh_token_using_existing_token()
     {
         $user = factory(User::class)->create();
-        $response = $this->apiAs($user, 'POST', "{$this->uri}/refresh", $this->headers)
+        $response = $this->apiAs($user, 'POST', "{$this->uri}/refresh", [], $this->headers)
             ->assertSuccessful()
             ->assertJsonStructure(['token_type', 'expires_in', 'access_token']);
 
@@ -66,7 +66,7 @@ class AuthTest extends TestCase
     public function an_authenticated_user_can_logout()
     {
         $user = factory(User::class)->create();
-        $this->apiAs($user, 'POST', "{$this->uri}/logout", $this->headers)
+        $this->apiAs($user, 'POST', "{$this->uri}/logout", [], $this->headers)
             ->assertSuccessful();
     }
 }

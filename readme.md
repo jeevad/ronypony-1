@@ -35,7 +35,7 @@
 * run `php artisan key:generate`
 * run `php artisan migrate`
 * run `php artisan storage:link`
-* Create virtual host for the project something like http://web.ronypony.local/ (optional)
+* Create virtual host for the project something like http://ronypony.local/ (optional)
 
 ### JWT token ###
 * run `php artisan jwt:secret` to generate secret key
