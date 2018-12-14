@@ -174,9 +174,15 @@ return [
             'min' => 'Landmark may not be less than 3 characters.',
             'max' => 'Landmark name may not be greater than 50 characters.',
         ],
+        'city' => [
+            'required' => 'City name can not be blank',
+            'city' => 'Invalid city',
+            'min' => 'City may not be less than 3 characters.',
+            'max' => 'City may not be greater than 100 characters.',
+        ],
         'zip_code' => [
             'required' => 'ZIP code can not be blank',
-            'landmark' => 'Invalid ZIP code',
+            'zip_code' => 'Invalid ZIP code',
             'min' => 'Landmark may not be less than 3 characters.',
             'max' => 'Landmark name may not be greater than 50 characters.',
         ],
