@@ -15,7 +15,7 @@ class ValidateLocality implements Rule
      */
     public function passes($attribute, $locality)
     {
-        return preg_match("/^[a-zA-Z\.'\s]+$/", $locality);
+        return preg_match("/^[a-zA-Z0-9\-\,\.'\s]+$/", $locality);
     }
 
     /**

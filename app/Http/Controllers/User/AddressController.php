@@ -4,11 +4,14 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Responses\BadResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddressRequest;
 use App\Http\Resources\AddressResource;
 use App\Http\Responses\SuccessResponse;
+use Illuminate\Database\QueryException;
+use App\Http\Responses\ServerErrorResponse;
 use App\Http\Responses\UnauthorizedResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -44,13 +47,19 @@ class AddressController extends Controller
     {
         $user = $request->user('api');
         $data = $request->toBag()->attributes();
-        $addressCount = Address::whereUserId($user->id)->count();
-        if ($addressCount === 0) {
-            $data['default'] = true;
-        }
-        $address = $user->addresses()->create($data);
+        try {
+            $addressCount = Address::whereUserId($user->id)->count();
+            if ($addressCount === 0) {
+                $data['default'] = true;
+            }
+            $address = $user->addresses()->create($data);
 
-        return new AddressResource($address->fresh());
+            return (new AddressResource($address->fresh()))
+                ->response()
+                ->setStatusCode(JsonResponse::HTTP_CREATED);
+        } catch (QueryException $e) {
+            return new ServerErrorResponse();
+        }
     }
 
     /**
@@ -84,9 +93,9 @@ class AddressController extends Controller
 
     public function markAsDefault(Request $request, Address $address)
     {
-        if ($address && $request->user('api')->id === $address->user_id) {
+        if ($address && (int)$request->user('api')->id === (int)$address->user_id) {
             $address = tap(Address::whereDefault(true)->first(), function ($defaultAddress) use ($address) {
-                if ($defaultAddress->id !== $address->id) {
+                if ((int)$defaultAddress->id !== (int)$address->id) {
                     $defaultAddress->update(['default' => false]);
                     $address->update(['default' => true]);
                     return $address;

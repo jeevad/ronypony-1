@@ -4,18 +4,18 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ValidateOfficeName implements Rule
+class ValidateCity implements Rule
 {
     /**
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute
-     * @param  mixed  $officeName
+     * @param  mixed  $city
      * @return bool
      */
-    public function passes($attribute, $officeName)
+    public function passes($attribute, $city)
     {
-        return preg_match("/^[a-zA-Z\-\,\.'\s]+$/", $officeName);
+        return preg_match("/^[a-zA-Z0-9\,\.'\s]+$/", $city);
     }
 
     /**
@@ -25,6 +25,6 @@ class ValidateOfficeName implements Rule
      */
     public function message()
     {
-        return trans('validation.custom.office_name.office_name');
+        return trans('validation.custom.city.city');
     }
 }
