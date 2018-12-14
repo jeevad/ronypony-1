@@ -28,7 +28,7 @@ class CreateAddressesTable extends Migration
             $table->unsignedInteger('country_id');
             $table->string('landmark')->nullable();
             $table->string('zip_code', 10);
-            $table->enum('type', ['SHIPPING', 'BILLING']);
+            $table->enum('type', ['SHIPPING', 'BILLING'])->default('SHIPPING');
             $table->tinyInteger('default')->default(0)->index();
             $table->timestamps();
 
