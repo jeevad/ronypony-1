@@ -32,7 +32,6 @@ Route::middleware(['web'])
     });
 
 
-
 Route::middleware(['web', 'auth'])
 // Route::middleware(['web'])
     ->name('admin.')
@@ -42,11 +41,11 @@ Route::middleware(['web', 'auth'])
         // Route::get('', 'DashboardController@index')
         // ->name('dashboard');
         Route::get('dashboard', 'DashboardController@index')
-        ->name('dashboard');
+            ->name('dashboard');
 
 
         Route::resource('page', 'Cms\PageController');
-        Route::resource('user-group', 'Auth\UserGroupController');
+        Route::resource('user-groups', 'GroupsController');
         Route::resource('user', 'Auth\UserController');
         Route::resource('attribute', 'Product\AttributeController');
         Route::resource('category', 'Product\CategoryController');
@@ -61,79 +60,79 @@ Route::middleware(['web', 'auth'])
 
 
         Route::post('get-attribute-element', 'Product\AttributeController@getElementHtml')
-        ->name('attribute.element');
+            ->name('attribute.element');
         Route::post('product-attribute-panel', 'Product\AttributeController@getAttribute')
-        ->name('product-attribute.get-attribute');
+            ->name('product-attribute.get-attribute');
 
         Route::post('get-property-element', 'Product\PropertyController@getElementHtml')
-        ->name('property.element');
+            ->name('property.element');
 
 
         Route::post('product-image/upload', 'Product\ProductController@uploadImage')
-        ->name('product.upload-image');
+            ->name('product.upload-image');
         Route::post('product-image/delete', 'Product\ProductController@deleteImage')
-        ->name('product.delete-image');
+            ->name('product.delete-image');
 
         Route::get('product-downloadable-demo/{token}', 'Product\ProductController@downloadDemoToken')
-        ->name('product.download.demo.media');
+            ->name('product.download.demo.media');
         Route::get('product-downloadable-main/{token}', 'Product\ProductController@downloadMainToken')
-        ->name('product.download.main.media');
+            ->name('product.download.main.media');
 
         Route::post('edit-product-variation', 'Product\ProductController@editVariation')
-        ->name('variation.edit');
+            ->name('variation.edit');
 
 
         Route::get('order', 'Order\OrderController@index')
-        ->name('order.index');
+            ->name('order.index');
 
 
         Route::get('order/{order}', 'Order\OrderController@view')
-        ->name('order.view');
+            ->name('order.view');
 
         Route::get('order/{order}/send-email-invoice', 'Order\OrderController@sendEmailInvoice')
-        ->name('order.send-email-invoice');
+            ->name('order.send-email-invoice');
         Route::get('order/{order}/change-status', 'Order\OrderController@editStatus')
-        ->name('order.change-status');
+            ->name('order.change-status');
         Route::put('order/{order}/update-status', 'Order\OrderController@updateStatus')
-        ->name('order.update-status');
+            ->name('order.update-status');
 
         Route::put('order/{order}/update-track-codes', 'Order\OrderController@updateTrackCode')
-        ->name('order.update-track-code');
+            ->name('order.update-track-code');
 
         Route::get('menu', 'Cms\MenuController@index')->name('menu.index');
         Route::post('menu', 'Cms\MenuController@store')->name('menu.store');
 
         Route::get('admin-user-detail', 'AdminUserController@detail')
-        ->name('admin-user.detail');
+            ->name('admin-user.detail');
         Route::get('admin-user-api-show', 'AdminUserController@apiShow')
-        ->name('admin-user.show.api');
+            ->name('admin-user.show.api');
 
 
         Route::get('configuration', 'ConfigurationController@index')
-        ->name('configuration');
+            ->name('configuration');
         Route::post('configuration', 'ConfigurationController@store')
-        ->name('configuration.store');
+            ->name('configuration.store');
 
         Route::get('module', 'ModuleController@index')
-        ->name('module.index');
+            ->name('module.index');
         Route::get('module/create', 'ModuleController@create')
-        ->name('module.create');
+            ->name('module.create');
         Route::post('module', 'ModuleController@store')
-        ->name('module.store');
+            ->name('module.store');
 
         Route::get('themes', 'ThemeController@index')
-        ->name('theme.index');
+            ->name('theme.index');
         Route::get('themes/create', 'ThemeController@create')
-        ->name('theme.create');
+            ->name('theme.create');
         Route::post('themes', 'ThemeController@store')
-        ->name('theme.store');
+            ->name('theme.store');
 
         Route::post('active-themes/{name}', 'ThemeController@activated')
-        ->name('theme.activated');
+            ->name('theme.activated');
         Route::post('deactive-themes/{name}', 'ThemeController@deactivated')
-        ->name('theme.deactivated');
+            ->name('theme.deactivated');
         Route::delete('themes/{name}', 'ThemeController@destroy')
-        ->name('theme.destroy');
+            ->name('theme.destroy');
 
         Route::get('user/{user}/change-password', 'Auth\UserController@changePasswordGet'
         )->name('user.change-password');
