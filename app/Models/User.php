@@ -45,6 +45,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->belongsTo(Role::class);
     }
 
+    public function group()
+    {
+        return $this->belongsTo(UserGroup::class);
+    }
+
     public function addresses()
     {
         return $this->hasMany(Address::class);
@@ -107,7 +112,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     {
         return asset("storage/{$this->avatarFolder()}/{$this->avatar}");
     }
-    
+
     /**
      * Check admin role
      *
