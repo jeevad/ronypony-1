@@ -1,10 +1,11 @@
 <?php
 
-namespace AvoRed\Framework\User\Requests;
+namespace App\Http\Requests\Admin;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleRequst extends FormRequest
+class RoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +24,18 @@ class RoleRequst extends FormRequest
      */
     public function rules()
     {
-        $validation['name'] = 'required|max:255';
-        return $validation;
+        $rules = ['name' => 'required|max:255'];
+        if ($this->getMethod() === 'POST') {
+            $rules['slug'] = 'required|max:255|alpha_dash|unique:roles';
+        }
+        if ($this->getMethod() === 'PUT') {
+            $rules['slug'] = [
+                'required', 'max:255', 'alpha_dash', Rule::unique('roles')
+                    ->ignore($this->route('role')->id),
+            ];
+        }
+
+
+        return $rules;
     }
 }
