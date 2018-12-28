@@ -53,7 +53,7 @@ Route::middleware(['web', 'auth'])
         Route::resource('product', 'Product\ProductController');
         Route::resource('property', 'Product\PropertyController');
         Route::resource('order-status', 'Product\OrderStatusController');
-        Route::resource('role', 'RoleController');
+        Route::resource('roles', 'RoleController');
         Route::resource('site-currency', 'SiteCurrencyController');
         Route::resource('admin-user', 'AdminUserController');
         Route::resource('country', 'CountryController');
