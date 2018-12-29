@@ -40,6 +40,10 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email_verified_at',
     ];
 
+    protected $casts = [
+        'banned' => 'boolean',
+    ];
+
     public function role()
     {
         return $this->belongsTo(Role::class);
@@ -86,6 +90,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return !is_null($this->banned_at);
     }
 
+    public function status(): string
+    {
+        return $this->banned ? 'Inactive' : 'Active';
+    }
+
     public function authenticatePassword($plainPassword): bool
     {
         return Hash::check($plainPassword, $this->getAuthPassword());
@@ -110,7 +119,23 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
     public function avatarURL()
     {
-        return asset("storage/{$this->avatarFolder()}/{$this->avatar}");
+        if ($this->avatar) {
+            return asset("storage/{$this->avatarFolder()}/{$this->avatar}");
+        }
+        return $this->gravatarUrl();
+    }
+
+    public function defaultAvatar()
+    {
+        return asset('assets/front/images/user50x50.png');
+    }
+
+    public function gravatarUrl($size = 100)
+    {
+        $hash = md5(strtolower(trim($this->email)));
+        $default = urlencode($this->defaultAvatar());
+
+        return "https://www.gravatar.com/avatar/$hash?s=$size&d=$default";
     }
 
     /**
