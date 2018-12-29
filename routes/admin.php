@@ -46,7 +46,7 @@ Route::middleware(['web', 'auth'])
 
         Route::resource('page', 'Cms\PageController');
         Route::resource('user-groups', 'GroupsController');
-        Route::resource('user', 'Auth\UserController');
+        Route::resource('users', 'UsersController');
         Route::resource('attribute', 'Product\AttributeController');
         Route::resource('category', 'Product\CategoryController');
         Route::resource('product', 'Product\ProductController');
