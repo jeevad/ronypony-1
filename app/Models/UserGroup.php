@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Support\Collection;
 
 class UserGroup extends BaseModel
 {
@@ -28,5 +29,13 @@ class UserGroup extends BaseModel
     public function setNameAttribute($name)
     {
         $this->attributes['name'] = ucwords($name);
+    }
+
+    public static function getGroupOptions()
+    {
+        $model = new static;
+        $options = Collection::make(['' => 'Please Select'] + $model->all()->pluck('name', 'id')->toArray());
+
+        return $options;
     }
 }
