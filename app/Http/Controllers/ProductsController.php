@@ -23,7 +23,7 @@ class ProductsController extends Controller
             return ProductResource::collection($products);
         }
 
-        throw new ModelNotFoundException;
+        throw new ModelNotFoundException(trans('alerts.records_not_found'));
     }
 
     /**
@@ -36,7 +36,7 @@ class ProductsController extends Controller
     {
         $product = Product::with('images')->idOrSlug($id)->first();
         if (!$product) {
-            throw new ModelNotFoundException;
+            throw new ModelNotFoundException(trans('alerts.resource_not_found'));
         }
         return new ProductResource($product);
     }
