@@ -17,25 +17,27 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->enum('type', ['BASIC', 'VARIATION', 'DOWNLOADABLE', 'VARIABLE_PRODUCT'])->default('BASIC');
 
-            $table->string('name')->nullable()->default(null);
-            $table->string('slug')->nullable()->default(null);
-            $table->string('sku')->nullable()->default(null);
-            $table->text('description')->nullable()->default(null);
-            $table->tinyInteger('status')->nullable()->default(null);
-            $table->tinyInteger('in_stock')->nullable()->default(null);
-            $table->tinyInteger('track_stock')->nullable()->default(null);
+            $table->string('name')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('sku')->nullable();
+            $table->text('description')->nullable();
+            $table->tinyInteger('status')->default(1)->index();
+            $table->tinyInteger('in_stock')->default(true);
+            $table->tinyInteger('track_stock')->default(true);
             $table->decimal('qty', 10, 6)->nullable();
-            $table->tinyInteger('is_taxable')->nullable()->default(null);
-            $table->decimal('price', 10, 6)->nullable()->default(null);
+            $table->tinyInteger('is_taxable')->default(true);
+            $table->decimal('price', 10, 6)->nullable();
 
-            $table->float('weight')->nullable()->default(null);
-            $table->float('width')->nullable()->default(null);
-            $table->float('height')->nullable()->default(null);
-            $table->float('length')->nullable()->default(null);
+            $table->float('weight')->nullable();
+            $table->float('width')->nullable();
+            $table->float('height')->nullable();
+            $table->float('length')->nullable();
 
-            $table->string('meta_title')->nullable()->default(null);
-            $table->string('meta_description')->nullable()->default(null);
+            $table->string('meta_title')->nullable();
+            $table->string('meta_description')->nullable();
             $table->timestamps();
+
+            $table->index(['title', 'description', 'status']);
         });
     }
 
