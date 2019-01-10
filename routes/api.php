@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::post('profiles', 'ProfilesController@store');
+Route::get('products', 'ProductsController@index');
+Route::get('products/{id}', 'ProductsController@show');
 Route::prefix('auth')->namespace('Auth')->group(function () {
     Route::post('login', 'AuthController@login');
     Route::post('password/email', 'ForgotPasswordController');

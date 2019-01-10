@@ -38,3 +38,11 @@ if (!function_exists('generate_file_name')) {
         return time() . "-" . uniqid() . '.' . $file_ext;
     }
 }
+
+if (!function_exists('is_url')) {
+
+    function is_url($url)
+    {
+        return filter_var($url, FILTER_VALIDATE_URL);
+    }
+}
