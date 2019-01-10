@@ -95,9 +95,9 @@ class Product extends BaseModel
         return $query->where('id', $idOrSlug)->orWhere('slug', $idOrSlug);
     }
 
-    public function setTitleAttribute($title)
+    public function setNameAttribute($name)
     {
-        $this->attributes['title'] = ucfirst($title);
+        $this->attributes['name'] = ucfirst($name);
     }
 
     public function setDescriptionAttribute($desc)

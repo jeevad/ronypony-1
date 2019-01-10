@@ -8,7 +8,7 @@ class ProductFilter extends Filters
 
     protected function keyword($keyword)
     {
-        return $this->builder->where('title', 'like', "$keyword")
+        return $this->builder->where('name', 'like', "%$keyword%")
             ->orWhere('description', 'like', "%$keyword%");
     }
 }
