@@ -37,7 +37,7 @@ class CreateProductsTable extends Migration
             $table->string('meta_description')->nullable();
             $table->timestamps();
 
-            $table->index(['title', 'description', 'status']);
+            $table->index(['name', 'description', 'status']);
         });
     }
 
