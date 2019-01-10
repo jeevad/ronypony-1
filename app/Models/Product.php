@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use App\Facades\LocalFile;
+use Illuminate\Support\Str;
+use App\Filters\ProductFilter;
 use App\Events\ProductAfterSave;
 use App\Events\ProductBeforeSave;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
-use App\Facades\LocalFile;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\App;
-use App\Contracts\ProductDownloadableUrlInterface;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Session;
-use App\Contracts\Repository\SiteCurrencyInterface;
+use Illuminate\Database\Eloquent\Collection;
 use App\Contracts\Repository\PropertyInterface;
+use App\Contracts\ProductDownloadableUrlInterface;
+use App\Contracts\Repository\SiteCurrencyInterface;
 use App\Contracts\Repository\CategoryFilterInterface;
 
 class Product extends BaseModel
@@ -23,6 +24,12 @@ class Product extends BaseModel
         'description', 'status', 'in_stock', 'track_stock', 'price',
         'qty', 'is_taxable', 'meta_title', 'meta_description',
         'weight', 'width', 'height', 'length',
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
+        'in_stock' => 'boolean',
+        'is_taxable' => 'boolean',
     ];
 
     /**
@@ -46,18 +53,14 @@ class Product extends BaseModel
 
     public function hasVariation()
     {
-        if ($this->type == self::$VARIATION_TYPE) {
-            return true;
-        }
-
-        return false;
+        return $this->type === self::$VARIATION_TYPE;
     }
 
     public static function getProductBySlug($slug)
     {
         $model = new static;
 
-        return $model->where('slug', '=', $slug)->first();
+        return $model->where('slug', $slug)->first();
     }
 
     public static function boot()
@@ -75,6 +78,31 @@ class Product extends BaseModel
             // if other slugs exist that are the same, append the count to the slug
             $model->slug = $count ? "{$slug}-{$count}" : $slug;
         });
+    }
+
+    public function scopeFilter($query, ProductFilter $filters)
+    {
+        return $filters->apply($query);
+    }
+
+    public static function scopeSlug($query, $slug)
+    {
+        return $query->where('slug', $slug);
+    }
+
+    public function scopeIdOrSlug($query, $idOrSlug)
+    {
+        return $query->where('id', $idOrSlug)->orWhere('slug', $idOrSlug);
+    }
+
+    public function setTitleAttribute($title)
+    {
+        $this->attributes['title'] = ucfirst($title);
+    }
+
+    public function setDescriptionAttribute($desc)
+    {
+        $this->attributes['description'] = ucfirst($desc);
     }
 
     public function getPriceAttribute($val)
@@ -99,7 +127,6 @@ class Product extends BaseModel
      */
     public function saveProductImages(array $data):self
     {
-        // echo '<pre>';print_r($data['image']);exit;
         if (isset($data['image']) && count($data['image']) > 0) {
             $exitingIds = $this->images()->get()->pluck('id')->toArray();
             foreach ($data['image'] as $key => $data) {
@@ -182,10 +209,10 @@ class Product extends BaseModel
 
             if (null === $downModel) {
                 $downModel = ProductDownloadableUrl::create([
-                                        'token' => $token,
-                                        'product_id' => $this->id,
-                                        'main_path' => $dbPath
-                                        ]);
+                    'token' => $token,
+                    'product_id' => $this->id,
+                    'main_path' => $dbPath
+                ]);
             } else {
                 $downModel->update(['main_path' => $dbPath]);
             }
@@ -202,7 +229,7 @@ class Product extends BaseModel
         }
     }
 
-     /**
+    /**
      * Save Product Attributes
      *
      * @param array $data
@@ -219,10 +246,10 @@ class Product extends BaseModel
 
                     //dd($propertyModel->attachProduct($this));
                     $propertyModel->attachProduct($this)
-                                    ->fill(['value' => $propertyValue])
-                                    ->save();
-                    $syncProperty[] = $propertyId;  
-                
+                        ->fill(['value' => $propertyValue])
+                        ->save();
+                    $syncProperty[] = $propertyId;
+
                 }
                 $this->properties()->sync($syncProperty);
             }
@@ -281,8 +308,8 @@ class Product extends BaseModel
                 }
 
                 ProductVariation::create(['product_id' => $this->id,
-                                        'variation_id' => $variableProduct->id
-                                        ]);
+                    'variation_id' => $variableProduct->id
+                ]);
             }
         }
     }
@@ -319,12 +346,12 @@ class Product extends BaseModel
     }
 
     /**
-    * Make all combination based on attributes array
-    *
-    * @param array $arrays
-    * @param integer $i
-    * @return array $result
-    */
+     * Make all combination based on attributes array
+     *
+     * @param array $arrays
+     * @param integer $i
+     * @return array $result
+     */
     public function combinations($arrays, $i = 0)
     {
         if (!isset($arrays[$i])) {
@@ -384,7 +411,7 @@ class Product extends BaseModel
     public function getImageAttribute()
     {
         $defaultPath = '/img/default-product.jpg';
-        $image = $this->images()->where('is_main_image', '=', 1)->first();
+        $image = $this->images()->where('is_main_image', 1)->first();
 
         if (null === $image) {
             return new LocalFile($defaultPath);
@@ -504,8 +531,8 @@ class Product extends BaseModel
     public function getVariableProduct($attributeDropdownOption)
     {
         $productAttributeIntegerValue = ProductAttributeIntegerValue::
-                                                whereAttributeId($attributeDropdownOption->attribute_id)
-                                                ->whereValue($attributeDropdownOption->id)->first();
+        whereAttributeId($attributeDropdownOption->attribute_id)
+            ->whereValue($attributeDropdownOption->id)->first();
 
         if (null === $productAttributeIntegerValue) {
             return;
@@ -540,7 +567,7 @@ class Product extends BaseModel
      * Product has many Categories.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     * 
+     *
      */
     public function properties()
     {
@@ -667,4 +694,18 @@ class Product extends BaseModel
         return $this->hasOne(ProductDownloadableUrl::class);
     }
 
+    public function url()
+    {
+        return url("products/{$this->slug}");
+    }
+
+    public function apiURL()
+    {
+        return url("api/products/{$this->id}");
+    }
+
+    public function webURL()
+    {
+        return $this->url();
+    }
 }
