@@ -51,3 +51,7 @@
 * run `php artisan config:clear`
 * `vendor\bin\phpunit` to run test cases
 * `vendor\bin\phpunit --filter <tes_name>` to run specific test case
+
+### Webmix ###
+* Run all Mix tasks `npm run dev`
+* Run all Mix tasks and minify output `npm run production`

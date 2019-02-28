@@ -32,7 +32,6 @@
 
 @include('admin.forms.textarea',['name' => 'description','label' => 'Description',
                                             'attributes' => ['class' => 'summernote','id' => 'description']])
-
 <div class="row">
     @if($model->type == "VARIATION")
         <div class="col-6">

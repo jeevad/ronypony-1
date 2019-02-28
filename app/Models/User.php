@@ -181,4 +181,16 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     {
         return [];
     }
+
+    public function isInWishlist($productId)
+    {
+        $wishList = Wishlist::where('user_id', '=', $this->attributes['id'])
+            ->where('product_id', '=', $productId)->get();
+
+        if (count($wishList) <= 0) {
+            return false;
+        }
+
+        return true;
+    }
 }
