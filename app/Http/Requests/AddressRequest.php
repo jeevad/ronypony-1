@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Helpers\AddressBag;
+use App\Rules\ValidateCity;
 use App\Rules\ValidateZIPCode;
 use App\Rules\ValidateLastName;
 use App\Rules\ValidateLocality;
@@ -23,7 +24,7 @@ class AddressRequest extends Request
             return true;
         }
         $address = $this->route('address');
-        return $address && $this->user('api')->id === $address->user_id;
+        return $address && (int)$this->user('api')->id === (int)$address->user_id;
 
     }
 
@@ -43,7 +44,7 @@ class AddressRequest extends Request
             'locality' => ['required', new ValidateLocality, 'min:3', 'max:100'],
             'address' => ['required', 'min:10', 'max:250'],
             'landmark' => 'sometimes|max:255',
-            'city' => 'required|alpha|max:255',
+            'city' => ['required', 'min:3', 'max:100', new ValidateCity,],
             'state_id' => 'required|exists:states,id',
             'country_id' => 'required|exists:countries,id',
             'zip_code' => ['required', new ValidateZIPCode],

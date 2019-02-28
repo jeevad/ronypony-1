@@ -2,26 +2,47 @@
 
 namespace App\Models;
 
-use App\Facades\LocalFile;
+use Storage;
 
 class ProductImage extends BaseModel
 {
     protected $fillable = ['product_id', 'path', 'is_main_image'];
+    protected $hidden = ['created_at', 'updated_at'];
+    protected static $path = 'uploads/catalog/images/';
+    protected static $sizes = [
+        'small' => ['150', '150'],
+        'medium' => ['350', '350'],
+        'large' => ['750', '750'],
+    ];
+    protected $casts = [
+        'is_main_image' => 'boolean',
+    ];
 
     public function products()
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function getPathAttribute()
+    public function getPathAttribute($path)
     {
-        if (null === $this->attributes['path'] || empty($this->attributes['path'])) {
-            return;
-        }
-        $symlink = config('site.symlink_storage_folder');
-        $relativePath = $symlink . '/' .config('site.image.path').$this->attributes['product_id'].'/'. $this->attributes['path'];
-        $localImage = new LocalFile($relativePath);
+        if ($path) {
+            $urls = [
+                'original_url' => $this->imageURL($path),
+            ];
+            $sizes = static::$sizes;
+            foreach ($sizes as $name => $size) {
+                $urls[$name . '_url'] = $this->imageURL($path);
+            }
 
-        return $localImage;
+            return $urls;
+        }
+    }
+
+    public function imageURL($path)
+    {
+        if (is_url($path)) {
+            return $path;
+        }
+        return Storage::disk('public')->url(static::$path . $path);
     }
 }

@@ -32,7 +32,7 @@ return [
         'path' => 'uploads/catalog/images/',
         'sizes' => [
             'small' => ['150', '150'],
-            'med' => ['350', '350'],
+            'medium' => ['350', '350'],
             'large' => ['750', '750'],
         ],
     ],

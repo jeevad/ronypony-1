@@ -15,7 +15,7 @@ class ValidateOfficeName implements Rule
      */
     public function passes($attribute, $officeName)
     {
-        return preg_match("/^[a-zA-Z\.'\s]+$/", $officeName);
+        return preg_match("/^[a-zA-Z\-\,\.'\s]+$/", $officeName);
     }
 
     /**

@@ -27,9 +27,9 @@
         </li>
         <li class="treeview"><a class="app-menu__item" href="#" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">User</span><i class="treeview-indicator fa fa-angle-right"></i></a>
           <ul class="treeview-menu">
-            <li><a class="treeview-item" href="{{ route('admin.user.index') }}"><i class="icon fa fa-circle-o"></i> {{ __('user.admin-user-list') }}</a></li>
-            <li><a class="treeview-item" href="{{ route('admin.role.index')}}" target="_blank" rel="noopener"><i class="icon fa fa-circle-o"></i> User Groups</a></li>
-            <li><a class="treeview-item" href="ui-cards.html"><i class="icon fa fa-circle-o"></i> Permissions</a></li>
+            <li><a class="treeview-item" href="{{ route('admin.users.index') }}"><i class="icon fa fa-circle-o"></i> {{ __('user.admin-user-list') }}</a></li>
+            <li><a class="treeview-item" href="{{ route('admin.user-groups.index')}}" rel="noopener"><i class="icon fa fa-circle-o"></i> User Groups</a></li>
+            <li><a class="treeview-item" href="{{ route('admin.roles.index')}}" rel="noopener"><i class="icon fa fa-circle-o"></i> User Roles</a></li>
             {{-- <li><a class="treeview-item" href="widgets.html"><i class="icon fa fa-circle-o"></i> Admin</a></li> --}}
             {{-- <li><a class="treeview-item" href="widgets.html"><i class="icon fa fa-circle-o"></i> Subscribers</a></li> --}}
           </ul>

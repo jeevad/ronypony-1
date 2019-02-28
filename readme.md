@@ -27,7 +27,7 @@
 * run `git clone https://github.com/samayamnag/ronypony.git <projectname>` to clone the repository
 * run `cd <projectname>`
 * run `sudo apt-get install php7.x-bcmath && apt-get install php7.x-zip`
-* run `cp .env.example .env`
+* run `cp .env.example .env` or `copy .env.example .env`
 * run `chmod 400 .env && chown -R www-data:www-data .env` to secure from public access
 * run `composer install --no-interaction --prefer-dist --optimize-autoloader`
 * Create a database and configure database(MongoDB also) in *.env*
@@ -35,12 +35,13 @@
 * run `php artisan key:generate`
 * run `php artisan migrate`
 * run `php artisan storage:link`
-* Create virtual host for the project something like http://web.ronypony.local/ (optional)
+* Create virtual host for the project something like http://ronypony.local/ (optional)
 
 ### JWT token ###
 * run `php artisan jwt:secret` to generate secret key
 
 ### Database seeding ###
+* run `composer dump-autoload` to load all Seeder classes
 * run `php artisan db:seed`
 
 ### Testing ###
@@ -55,3 +56,9 @@
 ### Webmix ###
 * Run all Mix tasks `npm run dev`
 * Run all Mix tasks and minify output `npm run production`
+
+### Clear ###
+* `php artisan config:clear`
+* `php artisan clear-compiled`
+* `php artisan optimize`
+* `php artisan config:cache`
