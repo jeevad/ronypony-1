@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\Admin\Product;
 
-use App\Models\AttributeDropdownOption;
+use App\Contracts\Repository\ProductDownloadableUrlInterface;
+use App\Contracts\Repository\ProductInterface;
+use App\Facades\Image;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Product\ProductRequest;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductDownloadableUrl;
 use App\Models\Property;
-use Illuminate\Http\Request;
+// use AvoRed\Framework\Product\DataGrid\ProductDataGrid;
+use App\Repository\ProductDownloadableUrlRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use App\Models\Product;
-use App\Models\Category;
-use App\Facades\Image;
-use App\Http\Requests\Admin\Product\ProductRequest;
-// use AvoRed\Framework\Product\DataGrid\ProductDataGrid;
-use App\Contracts\Repository\ProductInterface;
-use App\Models\ProductDownloadableUrl;
-use App\Repository\ProductDownloadableUrlRepository;
-use App\Contracts\Repository\ProductDownloadableUrlInterface;
-use App\Http\Controllers\Controller;
-
 
 class ProductController extends Controller
 {
@@ -36,11 +34,9 @@ class ProductController extends Controller
 
     public function __construct(ProductInterface $repository, ProductDownloadableUrlInterface $downRep)
     {
-        $this->repository       = $repository;
-        $this->downRepository   = $downRep;
+        $this->repository = $repository;
+        $this->downRepository = $downRep;
     }
-
-    
 
     /**
      * Display a listing of the resource.
@@ -98,6 +94,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $attributes = Collection::make([]);
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            dd((new ProductRequest)->all());
+        }
 
         // $properties = Property::all()->pluck('name', 'id');
         // $usedForAllProductProperties = Property::whereUseForAllProducts(1)->get();
@@ -110,9 +109,9 @@ class ProductController extends Controller
             ->with('model', $product)
             ->with('categoryOptions', Category::getCategoryOptions())
             ->with('storageOptions', $storageOptions);
-            // ->with('propertyOptions', $properties)
-            // ->with('usedForAllProductProperties', $usedForAllProductProperties)
-            // ->with('attributeOptions', $attributes);
+        // ->with('propertyOptions', $properties)
+        // ->with('usedForAllProductProperties', $usedForAllProductProperties)
+        // ->with('attributeOptions', $attributes);
     }
 
     /**
@@ -125,7 +124,9 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        //dd($request->all());
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            dd((new ProductRequest)->all());
+        }
         try {
             //$product = ProductModel::findorfail($id);
             $product->saveProduct($request->all());
@@ -164,7 +165,7 @@ class ProductController extends Controller
         // die($product_id);
         $tmpPath = str_split(strtolower(str_random(3)));
         // $checkDirectory = 'uploads/catalog/images/'.$request->product_id;
-        $checkDirectory = config('site.image.path').$request->product_id;
+        $checkDirectory = config('site.image.path') . $request->product_id;
         $dbPath = $checkDirectory . '/' . $image->getClientOriginalName();
 
         $image = Image::upload($image, $checkDirectory);
@@ -215,12 +216,12 @@ class ProductController extends Controller
     public function downloadMainToken($token)
     {
         $downloadableUrl = $this->downRepository->findByToken($token);
-        $path = storage_path("app/public" . DIRECTORY_SEPARATOR. $downloadableUrl->main_path);
+        $path = storage_path("app/public" . DIRECTORY_SEPARATOR . $downloadableUrl->main_path);
 
         return response()->download($path);
     }
 
-     /**
+    /**
      * Products Downloadable Main Media Download.
      *
      * @param string $token
@@ -230,7 +231,7 @@ class ProductController extends Controller
     public function downloadDemoToken($token)
     {
         $downloadableUrl = $this->downRepository->findByToken($token);
-        $path = storage_path("app/public" . DIRECTORY_SEPARATOR. $downloadableUrl->demo_path);
+        $path = storage_path("app/public" . DIRECTORY_SEPARATOR . $downloadableUrl->demo_path);
 
         return response()->download($path);
     }
@@ -246,7 +247,7 @@ class ProductController extends Controller
     {
         $product = Product::findorfail($request->get('variation_id'));
         $view = view('admin.product.variation-modal')
-                            ->with('model', $product);
+            ->with('model', $product);
 
         return new JsonResponse(['success' => true, 'content' => $view->render(), 'modalId' => '#variation-modal-' . $product->id]);
     }
@@ -264,7 +265,6 @@ class ProductController extends Controller
         return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
     }
 
-    
     /**
      * return random string only lower and without digits.
      *
@@ -273,10 +273,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        
-        return view('admin.product.show')
-                ->with('product', $product);
-    }
 
+        return view('admin.product.show')
+            ->with('product', $product);
+    }
 
 }

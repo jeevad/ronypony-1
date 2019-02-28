@@ -4,6 +4,9 @@
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
 @endsection
 @section('content')
+{{--  @if ($errors->any())
+        {{ implode('', $errors->all('<div>:message</div>')) }}
+@endif  --}}
 <div id="admin-product-edit-page">
         <div class="row">
             <div class="col-12">
@@ -67,6 +70,7 @@
                     </a>
                     <div class="card-body collapse" id="property">
                         {{-- @include('admin.product.card.property') --}}
+                        @include('admin.product.card.options')
                     </div>
                 </div>
 
