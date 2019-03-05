@@ -65,8 +65,8 @@
     </main>
     <!-- Scripts -->
     @include('frontend.layouts.footer')
-    {{-- <script src="/assets/admin/js/app.js"></script> --}}
-    
+    {{--  <script src="/assets/admin/js/app.js"></script>  --}}
+    <script type="text/javascript" src="/assets/angular-1.7.6/angular.min.js"></script>
     <!--===============================================================================================-->
 	<script type="text/javascript" src="/assets/front/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->

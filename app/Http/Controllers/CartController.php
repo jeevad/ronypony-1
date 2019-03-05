@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use AvoRed\Framework\Cart\Facade as Cart;
+use Jcart\Framework\Cart\Facade as Cart;
 use App\Contracts\Repository\ProductInterface;
 use App\Contracts\Repository\ConfigurationInterface;
 

@@ -12,6 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js(['resources/js/app.js', 'resources/js/simplebar.js','resources/admin/js/script.js'], 'public/assets/admin/js')
+ .js(['resources/js/app.js', 'resources/js/simplebar.js','resources/admin/js/script.js'], 'public/assets/front/js')
     .sass('resources/admin/sass/main.scss',
         'public/assets/admin/css/app.css');
     // .styles([

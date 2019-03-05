@@ -36,7 +36,7 @@ class ProductViewController extends Controller
         $title = $product->meta_title ?? $product->name;
         $description = $product->meta_description ?? substr($product->description, 0, 255);
 
-        return view('product.view')
+        return view('frontend.product.view')
                                 ->with('product', $product)
                                 ->with('title', $title)
                                 ->with('description', $description);
