@@ -50,19 +50,19 @@
 				"Jcart\\Framework\\Provider"
 			],
 			"aliases" : {
-				"AdminMenu" : "Jcart\\Framework\\AdminMenu\\Facade",
-				"AdminConfiguration" : "Jcart\\Framework\\AdminConfiguration\\Facade",
-				"Breadcrumb" : "Jcart\\Framework\\Breadcrumb\\Facade",
-				"Cart" : "Jcart\\Framework\\Cart\\Facade",
-				"DataGrid" : "Jcart\\Framework\\DataGrid\\Facade",
-				"Image" : "Jcart\\Framework\\Image\\Facade",
-				"Menu" : "Jcart\\Framework\\Menu\\Facade",
-				"Payment" : "Jcart\\Framework\\Payment\\Facade",
-				"Permission" : "Jcart\\Framework\\Permission\\Facade",
-				"Shipping" : "Jcart\\Framework\\Shipping\\Facade",
-				"Tabs" : "Jcart\\Framework\\Tabs\\Facade",
-				"Theme" : "Jcart\\Framework\\Theme\\Facade",
-				"Widget" : "Jcart\\Framework\\Widget\\Facade"
+				// "AdminMenu" : "Jcart\\Framework\\AdminMenu\\Facade",
+				// "AdminConfiguration" : "Jcart\\Framework\\AdminConfiguration\\Facade",
+				// "Breadcrumb" : "Jcart\\Framework\\Breadcrumb\\Facade",
+				"Cart" : "Jcart\\Framework\\Cart\\Facade"
+				// "DataGrid" : "Jcart\\Framework\\DataGrid\\Facade",
+				// "Image" : "Jcart\\Framework\\Image\\Facade",
+				// "Menu" : "Jcart\\Framework\\Menu\\Facade",
+				// "Payment" : "Jcart\\Framework\\Payment\\Facade",
+				// "Permission" : "Jcart\\Framework\\Permission\\Facade",
+				// "Shipping" : "Jcart\\Framework\\Shipping\\Facade",
+				// "Tabs" : "Jcart\\Framework\\Tabs\\Facade",
+				// "Theme" : "Jcart\\Framework\\Theme\\Facade",
+				// "Widget" : "Jcart\\Framework\\Widget\\Facade"
 			}
 		}
 	},

@@ -3,9 +3,9 @@
 namespace Jcart\Framework\Cart;
 
 use Jcart\Framework\Cart\Product as CartFacadeProduct;
-use Jcart\Framework\Models\Database\Attribute;
-use Jcart\Framework\Models\Database\ProductAttributeIntegerValue;
-use Jcart\Framework\Models\Database\Product;
+// use Jcart\Framework\Models\Database\Attribute;
+// use Jcart\Framework\Models\Database\ProductAttributeIntegerValue;
+use App\Models\Product;
 use Illuminate\Session\SessionManager;
 use Illuminate\Support\Collection;
 
