@@ -177,6 +177,7 @@ return [
         App\Providers\RepositoryProvider::class,
         App\Providers\ImageServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Jcart\Framework\Provider::class,
 
     ],
 

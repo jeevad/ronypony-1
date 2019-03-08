@@ -65,7 +65,7 @@ class Provider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerConfigData();
+        // $this->registerConfigData();
         // Passport::ignoreMigrations();
         $this->registerProviders();
     }
